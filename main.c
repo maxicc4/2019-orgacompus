@@ -27,6 +27,13 @@ static void do_version(const char *);
 int main(int argc, char * const argv[])
 {
 	parse_cmdline(argc, argv);
+
+	// Parsear linea y obtener 2 matrices
+
+	// Multiplicar matrices
+
+	// Imprimir resultado
+	
 	return 0;
 }
 
