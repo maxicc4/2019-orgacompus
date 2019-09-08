@@ -24,17 +24,51 @@ static void parse_cmdline(int, char * const []);
 static void do_usage(const char *, int);
 static void do_version(const char *);
 
+char *getline(FILE *);
+
 int main(int argc, char * const argv[])
 {
 	parse_cmdline(argc, argv);
+	FILE *fp_in = stdin;
 
-	// Parsear linea y obtener 2 matrices
+	while (!feof(fp_in)) {
+		char *line = getline(fp_in);
 
-	// Multiplicar matrices
+		if (line == NULL) {
+			fprintf(stderr, "cannot read line.\n");
+			exit(1);
+		}
+		printf("Line: %s\n", line);
+		// Parsear linea y obtener 2 matrices
+		free(line);
+		// Multiplicar matrices
 
-	// Imprimir resultado
+		// Imprimir resultado
+
+		
+	}
 	
 	return 0;
+}
+
+// https://sucs.org/Knowledge/Help/Program%20Advisory/Reading%20an%20arbitrarily%20long%20line%20in%20C
+char *getline(FILE *f)
+{
+    size_t size = 0;
+    size_t len = 0;
+    size_t last = 0;
+    char *buf = NULL;
+
+    do {
+        size += BUFSIZ; /* BUFSIZ is defined as "the optimal read size for this platform" */
+        buf = realloc(buf,size);
+
+        if (buf == NULL) return NULL;
+        fgets(buf+last,size,f);
+        len = strlen(buf);
+        last = len - 1;
+    } while (!feof(f) && buf[last]!='\n');
+    return buf;
 }
 
 static void parse_cmdline(int argc, char * const argv[])
