@@ -20,25 +20,40 @@
 #define optional_argument 2
 #endif
 
-static void parse_cmdline(int, char * const []);
-static void do_usage(const char *, int);
-static void do_version(const char *);
+typedef struct matrix {
+	size_t rows;
+	size_t cols;
+	double* array;
+} matrix_t;
 
-char *getline(FILE *);
+matrix_t *create_matrix(size_t rows, size_t cols);
+void destroy_matrix(matrix_t* m);
+
+static void parse_cmdline(int argc, char * const argv[]);
+static void do_usage(const char *name, int status);
+static void do_version(const char *name);
+
+char *get_line(FILE *f);
+int parse_line(char *line, matrix_t **m1, matrix_t **m2);
+
 
 int main(int argc, char * const argv[])
 {
 	parse_cmdline(argc, argv);
 	FILE *fp_in = stdin;
+	matrix_t *m1 = NULL;
+	matrix_t *m2 = NULL;
+	matrix_t *m_result = NULL;
 
 	while (!feof(fp_in)) {
-		char *line = getline(fp_in);
+		char *line = get_line(fp_in);
 
 		if (line == NULL) {
 			fprintf(stderr, "cannot read line.\n");
 			exit(1);
 		}
 		printf("Line: %s\n", line);
+		parse_line(line, &m1, &m2);
 		// Parsear linea y obtener 2 matrices
 		free(line);
 		// Multiplicar matrices
@@ -51,8 +66,53 @@ int main(int argc, char * const argv[])
 	return 0;
 }
 
-// https://sucs.org/Knowledge/Help/Program%20Advisory/Reading%20an%20arbitrarily%20long%20line%20in%20C
-char *getline(FILE *f)
+int parse_line(char *line, matrix_t **m1, matrix_t **m2)
+{
+	char *line_end;
+	double value;
+	matrix_t *matrices[2];
+	
+	int n = strtoul(line, &line_end, 10);
+	
+	if (n > 0) {
+		int num_values = n*n;
+		int i = 0;
+
+		*m1 = create_matrix(n, n);
+		matrices[0] = *m1;
+		*m2 = create_matrix(n, n);
+		matrices[1] = *m2;
+		char *token = strtok(line_end, " ");
+		sscanf(token, "%lg", &value);
+		(*m1)->array[i] = value;
+		i++;
+		//printf("%lg ", value);
+		// Hacer push de value a algun array
+		for (int x=0; x < 2; x++) {
+			matrix_t *m = matrices[x];
+			while ( (i < num_values) && (token=strtok(NULL, " ")) ) {
+				sscanf(token, "%lg", &value);
+				m->array[i] = value;
+				i++;
+				//printf("%lg ", value);
+				// Hacer push de value a algun array
+				/*if (i % n == 0) {
+					printf("\n");
+				}*/
+			}
+			if (i != num_values) {
+				fprintf(stderr, "cannot parse line.\n");
+				exit(1);
+			}
+			i = 0;
+		}
+		
+	}
+	//printf("%d\n", n);
+}
+
+// Lee una linea de cualquier tamanio del file pointer.
+char *get_line(FILE *f)
 {
     size_t size = 0;
     size_t len = 0;
@@ -117,4 +177,20 @@ static void do_version(const char *name)
 {
 	fprintf(stderr, "%s\n", VERSION);
 	exit(0);
+}
+
+matrix_t* create_matrix(size_t rows, size_t cols)
+{
+	matrix_t *matrix = malloc(sizeof(matrix_t));
+	matrix->rows = rows;
+	matrix->cols = cols;
+	matrix->array = malloc(rows*cols*sizeof(double));
+
+	return matrix;
+}
+
+void destroy_matrix(matrix_t* m)
+{
+	free(m->array);
+	free(m);
 }
