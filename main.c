@@ -53,19 +53,24 @@ int main(int argc, char * const argv[])
 			exit(1);
 		}
 		printf("Line: %s\n", line);
-		parse_line(line, &m1, &m2);
-		// Parsear linea y obtener 2 matrices
+		if (parse_line(line, &m1, &m2) == 1) {
+			fprintf(stderr, "cannot parse line.\n");
+			exit(1);
+		}
 		free(line);
 		// Multiplicar matrices
-
+		destroy_matrix(m1);
+		destroy_matrix(m2);
 		// Imprimir resultado
+		
 
 		
 	}
 	
 	return 0;
 }
-
+// Hace el parseo de la linea y crea las 2 matrices
+// Si obtuvo error devuelve 1. Si fue exitoso 0
 int parse_line(char *line, matrix_t **m1, matrix_t **m2)
 {
 	char *line_end;
@@ -73,7 +78,7 @@ int parse_line(char *line, matrix_t **m1, matrix_t **m2)
 	matrix_t *matrices[2];
 	
 	int n = strtoul(line, &line_end, 10);
-	
+
 	if (n > 0) {
 		int num_values = n*n;
 		int i = 0;
@@ -83,32 +88,27 @@ int parse_line(char *line, matrix_t **m1, matrix_t **m2)
 		*m2 = create_matrix(n, n);
 		matrices[1] = *m2;
 		char *token = strtok(line_end, " ");
+		if (token == NULL) {
+			return 1;
+		}
 		sscanf(token, "%lg", &value);
 		(*m1)->array[i] = value;
 		i++;
-		//printf("%lg ", value);
-		// Hacer push de value a algun array
 		for (int x=0; x < 2; x++) {
 			matrix_t *m = matrices[x];
 			while ( (i < num_values) && (token=strtok(NULL, " ")) ) {
 				sscanf(token, "%lg", &value);
 				m->array[i] = value;
 				i++;
-				//printf("%lg ", value);
-				// Hacer push de value a algun array
-				/*if (i % n == 0) {
-					printf("\n");
-				}*/
 			}
 			if (i != num_values) {
-				fprintf(stderr, "cannot parse line.\n");
-				exit(1);
+				return 1;
 			}
 			i = 0;
 		}
-		
+		return 0;
 	}
-	//printf("%d\n", n);
+	return 1;
 }
 
 // Lee una linea de cualquier tamanio del file pointer.
@@ -191,6 +191,8 @@ matrix_t* create_matrix(size_t rows, size_t cols)
 
 void destroy_matrix(matrix_t* m)
 {
-	free(m->array);
-	free(m);
+	if (m != NULL) {
+		free(m->array);
+		free(m);
+	}
 }
