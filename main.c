@@ -29,6 +29,7 @@ typedef struct matrix {
 matrix_t *create_matrix(size_t rows, size_t cols);
 void destroy_matrix(matrix_t* m);
 int print_matrix(FILE* fp, matrix_t* m);
+matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2);
 
 static void parse_cmdline(int argc, char * const argv[]);
 static void do_usage(const char *name, int status);
@@ -60,17 +61,13 @@ int main(int argc, char * const argv[])
 			exit(1);
 		}
 		free(line);
-		// Multiplicar matrices
 		
-		print_matrix(fp_out, m1);
-		print_matrix(fp_out, m2);
-
+		m_result = matrix_multiply(m1, m2);
 		destroy_matrix(m1);
 		destroy_matrix(m2);
-		// Imprimir resultado
-		
 
-		
+		print_matrix(fp_out, m_result);
+		destroy_matrix(m_result);
 	}
 	
 	return 0;
@@ -212,4 +209,18 @@ int print_matrix(FILE* fp, matrix_t* m)
 		fprintf(fp, "%lg ", m->array[i]);
 	}
 	fprintf(fp, "\n");
+}
+
+matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2)
+{
+	matrix_t *m_result = create_matrix(m1->rows, m2->cols);
+	for (int i=0; i < m_result->rows; i++) {
+		for (int j=0; j < m_result->cols; j++) {
+			m_result->array[(i*m_result->cols) + j] = 0;
+			for (int k=0; k < m1->cols; k++) {
+				m_result->array[(i*m_result->cols) + j] += m1->array[(i*m_result->cols) + k] * m2->array[(k*m_result->cols) + j];
+			}
+		}
+	}
+	return m_result;
 }
