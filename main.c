@@ -28,6 +28,7 @@ typedef struct matrix {
 
 matrix_t *create_matrix(size_t rows, size_t cols);
 void destroy_matrix(matrix_t* m);
+int print_matrix(FILE* fp, matrix_t* m);
 
 static void parse_cmdline(int argc, char * const argv[]);
 static void do_usage(const char *name, int status);
@@ -41,6 +42,7 @@ int main(int argc, char * const argv[])
 {
 	parse_cmdline(argc, argv);
 	FILE *fp_in = stdin;
+	FILE *fp_out = stdout;
 	matrix_t *m1 = NULL;
 	matrix_t *m2 = NULL;
 	matrix_t *m_result = NULL;
@@ -59,6 +61,10 @@ int main(int argc, char * const argv[])
 		}
 		free(line);
 		// Multiplicar matrices
+		
+		print_matrix(fp_out, m1);
+		print_matrix(fp_out, m2);
+
 		destroy_matrix(m1);
 		destroy_matrix(m2);
 		// Imprimir resultado
@@ -195,4 +201,15 @@ void destroy_matrix(matrix_t* m)
 		free(m->array);
 		free(m);
 	}
+}
+
+// Suponemos que la matriz a imprimir siempre es cuadrada
+int print_matrix(FILE* fp, matrix_t* m)
+{
+	fprintf(fp, "%ld ", m->rows);
+	int total_values = m->rows * m->rows;
+	for (int i=0; i < total_values; i++) {
+		fprintf(fp, "%lg ", m->array[i]);
+	}
+	fprintf(fp, "\n");
 }
