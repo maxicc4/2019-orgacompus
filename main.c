@@ -55,7 +55,6 @@ int main(int argc, char * const argv[])
 			fprintf(stderr, "cannot read line.\n");
 			exit(1);
 		}
-		printf("Line: %s\n", line);
 		if (parse_line(line, &m1, &m2) == 1) {
 			fprintf(stderr, "cannot parse line.\n");
 			exit(1);
