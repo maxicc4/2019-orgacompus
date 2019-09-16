@@ -47,16 +47,17 @@ int main(int argc, char * const argv[])
 	matrix_t *m1 = NULL;
 	matrix_t *m2 = NULL;
 	matrix_t *m_result = NULL;
+	unsigned long int num_line = 1;
 
 	while (!feof(fp_in)) {
 		char *line = get_line(fp_in);
 
 		if (line == NULL) {
-			fprintf(stderr, "cannot read line.\n");
+			fprintf(stderr, "Error: cannot read line %ld.\n", num_line);
 			exit(1);
 		}
 		if (parse_line(line, &m1, &m2) == 1) {
-			fprintf(stderr, "cannot parse line.\n");
+			fprintf(stderr, "Error: cannot parse line %ld.\n", num_line);
 			exit(1);
 		}
 		free(line);
@@ -67,6 +68,7 @@ int main(int argc, char * const argv[])
 
 		print_matrix(fp_out, m_result);
 		destroy_matrix(m_result);
+		num_line++;
 	}
 	
 	return 0;
