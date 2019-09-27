@@ -128,7 +128,9 @@ char *get_line(FILE *f)
         buf = realloc(buf,size);
 
         if (buf == NULL) return NULL;
-        fgets(buf+last,size,f);
+        if ((fgets(buf+last,size,f) == NULL) && !feof(f)) {
+        	return NULL;
+        }
         len = strlen(buf);
         last = len - 1;
     } while (!feof(f) && buf[last]!='\n');
