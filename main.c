@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <getopt.h>
+#include <ctype.h>
 
 
 #ifndef VERSION
@@ -56,7 +57,7 @@ int main(int argc, char * const argv[])
 			fprintf(stderr, "Error: cannot read line %ld.\n", num_line);
 			exit(1);
 		}
-		if (strcmp(line,"") != 0) {
+		if (!isspace(line[0])) {
 			if (parse_line(line, &m1, &m2) == 1) {
 				fprintf(stderr, "Error: cannot parse line %ld.\n", num_line);
 				exit(1);
@@ -134,7 +135,7 @@ char *get_line(FILE *f)
         if (fgets(buf+last,size,f) == NULL) {
         	if (feof(f)) {
         		free(buf);
-        		return "";
+        		return " ";
         	} else {
         		return NULL;
         	}
