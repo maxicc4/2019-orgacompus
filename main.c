@@ -56,18 +56,21 @@ int main(int argc, char * const argv[])
 			fprintf(stderr, "Error: cannot read line %ld.\n", num_line);
 			exit(1);
 		}
-		if (parse_line(line, &m1, &m2) == 1) {
-			fprintf(stderr, "Error: cannot parse line %ld.\n", num_line);
-			exit(1);
-		}
-		free(line);
-		
-		m_result = matrix_multiply(m1, m2);
-		destroy_matrix(m1);
-		destroy_matrix(m2);
+		if (strcmp(line,"") != 0) {
+			if (parse_line(line, &m1, &m2) == 1) {
+				fprintf(stderr, "Error: cannot parse line %ld.\n", num_line);
+				exit(1);
+			}
 
-		print_matrix(fp_out, m_result);
-		destroy_matrix(m_result);
+			free(line);
+			
+			m_result = matrix_multiply(m1, m2);
+			destroy_matrix(m1);
+			destroy_matrix(m2);
+
+			print_matrix(fp_out, m_result);
+			destroy_matrix(m_result);
+		}
 		num_line++;
 	}
 	
@@ -128,8 +131,12 @@ char *get_line(FILE *f)
         buf = realloc(buf,size);
 
         if (buf == NULL) return NULL;
-        if ((fgets(buf+last,size,f) == NULL) && !feof(f)) {
-        	return NULL;
+        if (fgets(buf+last,size,f) == NULL) {
+        	if (feof(f)) {
+        		return "";
+        	} else {
+        		return NULL;
+        	}
         }
         len = strlen(buf);
         last = len - 1;
