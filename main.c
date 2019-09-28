@@ -133,6 +133,7 @@ char *get_line(FILE *f)
         if (buf == NULL) return NULL;
         if (fgets(buf+last,size,f) == NULL) {
         	if (feof(f)) {
+        		free(buf);
         		return "";
         	} else {
         		return NULL;
