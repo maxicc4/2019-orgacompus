@@ -40,6 +40,45 @@ prueba3()
 	rm $BASEDIR/tests/temp.txt
 }
 
+prueba4()
+{
+	cat $BASEDIR/tests/input4.txt | ./tp0 > $BASEDIR/tests/temp.txt
+
+	diff -q $BASEDIR/tests/temp.txt $BASEDIR/tests/output4.txt 1>/dev/null
+	if [ $? -eq 0 ]; then
+		RESULTADO="OK"
+	else
+		RESULTADO="ERROR"
+	fi
+	rm $BASEDIR/tests/temp.txt
+}
+
+prueba5()
+{
+	cat $BASEDIR/tests/input5.txt | ./tp0 > $BASEDIR/tests/temp.txt
+
+	diff -q $BASEDIR/tests/temp.txt $BASEDIR/tests/output5.txt 1>/dev/null
+	if [ $? -eq 0 ]; then
+		RESULTADO="OK"
+	else
+		RESULTADO="ERROR"
+	fi
+	rm $BASEDIR/tests/temp.txt
+}
+
+prueba6()
+{
+	cat $BASEDIR/tests/input6.txt | ./tp0 > $BASEDIR/tests/temp.txt
+
+	diff -q $BASEDIR/tests/temp.txt $BASEDIR/tests/output6.txt 1>/dev/null
+	if [ $? -eq 0 ]; then
+		RESULTADO="OK"
+	else
+		RESULTADO="ERROR"
+	fi
+	rm $BASEDIR/tests/temp.txt
+}
+
 echo "Ejecutando pruebas"
 
 prueba1
@@ -48,3 +87,10 @@ prueba2
 echo "Prueba 2: $RESULTADO"
 prueba3
 echo "Prueba 3: $RESULTADO"
+prueba4
+echo "Prueba 4: $RESULTADO"
+prueba5
+echo "Prueba 5: $RESULTADO"
+prueba6
+echo "Prueba 6: $RESULTADO"
+

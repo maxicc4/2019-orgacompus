@@ -132,7 +132,7 @@ char *get_line(FILE *f)
         buf = realloc(buf,size);
 
         if (buf == NULL) return NULL;
-        if (fgets(buf+last,size,f) == NULL) {
+        if (fgets(buf+len,BUFSIZ,f) == NULL) {
         	if (feof(f)) {
         		free(buf);
         		return " ";
