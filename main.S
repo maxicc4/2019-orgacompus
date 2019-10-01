@@ -64,6 +64,15 @@ $L20:
 	la	$t9,exit
 	jal	$ra,$t9
 $L21:
+	lw	$v0,48($fp)
+	lb	$v1,0($v0)
+	lw	$v0,_ctype_
+	addu	$v0,$v1,$v0
+	addu	$v0,$v0,1
+	lbu	$v0,0($v0)
+	srl	$v0,$v0,3
+	andi	$v0,$v0,0x1
+	bne	$v0,$zero,$L22
 	addu	$v0,$fp,32
 	addu	$v1,$fp,36
 	lw	$a0,48($fp)
@@ -73,7 +82,7 @@ $L21:
 	jal	$ra,$t9
 	move	$v1,$v0
 	li	$v0,1			# 0x1
-	bne	$v1,$v0,$L22
+	bne	$v1,$v0,$L23
 	la	$a0,__sF+176
 	la	$a1,$LC1
 	lw	$a2,44($fp)
@@ -82,7 +91,7 @@ $L21:
 	li	$a0,1			# 0x1
 	la	$t9,exit
 	jal	$ra,$t9
-$L22:
+$L23:
 	lw	$a0,48($fp)
 	la	$t9,free
 	jal	$ra,$t9
@@ -104,6 +113,7 @@ $L22:
 	lw	$a0,40($fp)
 	la	$t9,destroy_matrix
 	jal	$ra,$t9
+$L22:
 	lw	$v0,44($fp)
 	addu	$v0,$v0,1
 	sw	$v0,44($fp)
@@ -151,7 +161,7 @@ parse_line:
 	jal	$ra,$t9
 	sw	$v0,48($fp)
 	lw	$v0,48($fp)
-	blez	$v0,$L24
+	blez	$v0,$L25
 	lw	$v1,48($fp)
 	lw	$v0,48($fp)
 	mult	$v1,$v0
@@ -184,11 +194,11 @@ parse_line:
 	jal	$ra,$t9
 	sw	$v0,60($fp)
 	lw	$v0,60($fp)
-	bne	$v0,$zero,$L25
+	bne	$v0,$zero,$L26
 	li	$v0,1			# 0x1
 	sw	$v0,72($fp)
-	b	$L23
-$L25:
+	b	$L24
+$L26:
 	addu	$v0,$fp,32
 	lw	$a0,60($fp)
 	la	$a1,$LC3
@@ -207,12 +217,12 @@ $L25:
 	addu	$v0,$v0,1
 	sw	$v0,56($fp)
 	sw	$zero,64($fp)
-$L26:
+$L27:
 	lw	$v0,64($fp)
 	slt	$v0,$v0,2
-	bne	$v0,$zero,$L29
-	b	$L27
-$L29:
+	bne	$v0,$zero,$L30
+	b	$L28
+$L30:
 	lw	$v0,64($fp)
 	sll	$v1,$v0,2
 	addu	$v0,$fp,24
@@ -220,20 +230,20 @@ $L29:
 	addu	$v0,$v0,16
 	lw	$v0,0($v0)
 	sw	$v0,68($fp)
-$L30:
+$L31:
 	lw	$v0,56($fp)
 	lw	$v1,52($fp)
 	slt	$v0,$v0,$v1
-	beq	$v0,$zero,$L31
+	beq	$v0,$zero,$L32
 	move	$a0,$zero
 	la	$a1,$LC2
 	la	$t9,strtok
 	jal	$ra,$t9
 	sw	$v0,60($fp)
 	lw	$v0,60($fp)
-	bne	$v0,$zero,$L32
-	b	$L31
-$L32:
+	bne	$v0,$zero,$L33
+	b	$L32
+$L33:
 	addu	$v0,$fp,32
 	lw	$a0,60($fp)
 	la	$a1,$LC3
@@ -250,27 +260,27 @@ $L32:
 	lw	$v0,56($fp)
 	addu	$v0,$v0,1
 	sw	$v0,56($fp)
-	b	$L30
-$L31:
+	b	$L31
+$L32:
 	lw	$v1,56($fp)
 	lw	$v0,52($fp)
-	beq	$v1,$v0,$L34
+	beq	$v1,$v0,$L35
 	li	$v0,1			# 0x1
 	sw	$v0,72($fp)
-	b	$L23
-$L34:
+	b	$L24
+$L35:
 	sw	$zero,56($fp)
 	lw	$v0,64($fp)
 	addu	$v0,$v0,1
 	sw	$v0,64($fp)
-	b	$L26
-$L27:
+	b	$L27
+$L28:
 	sw	$zero,72($fp)
-	b	$L23
-$L24:
+	b	$L24
+$L25:
 	li	$v0,1			# 0x1
 	sw	$v0,72($fp)
-$L23:
+$L24:
 	lw	$v0,72($fp)
 	move	$sp,$fp
 	lw	$ra,88($sp)
@@ -300,7 +310,7 @@ get_line:
 	sw	$zero,28($fp)
 	sw	$zero,32($fp)
 	sw	$zero,36($fp)
-$L36:
+$L37:
 	lw	$v0,24($fp)
 	addu	$v0,$v0,1024
 	sw	$v0,24($fp)
@@ -310,18 +320,34 @@ $L36:
 	jal	$ra,$t9
 	sw	$v0,36($fp)
 	lw	$v0,36($fp)
-	bne	$v0,$zero,$L39
+	bne	$v0,$zero,$L40
 	sw	$zero,40($fp)
-	b	$L35
-$L39:
+	b	$L36
+$L40:
 	lw	$v1,36($fp)
-	lw	$v0,32($fp)
+	lw	$v0,28($fp)
 	addu	$v0,$v1,$v0
 	move	$a0,$v0
-	lw	$a1,24($fp)
+	li	$a1,1024			# 0x400
 	lw	$a2,64($fp)
 	la	$t9,fgets
 	jal	$ra,$t9
+	bne	$v0,$zero,$L41
+	lw	$v0,64($fp)
+	lhu	$v0,12($v0)
+	srl	$v0,$v0,5
+	andi	$v0,$v0,0x1
+	beq	$v0,$zero,$L42
+	lw	$a0,36($fp)
+	la	$t9,free
+	jal	$ra,$t9
+	la	$v0,$LC2
+	sw	$v0,40($fp)
+	b	$L36
+$L42:
+	sw	$zero,40($fp)
+	b	$L36
+$L41:
 	lw	$a0,36($fp)
 	la	$t9,strlen
 	jal	$ra,$t9
@@ -333,17 +359,17 @@ $L39:
 	lhu	$v0,12($v0)
 	srl	$v0,$v0,5
 	andi	$v0,$v0,0x1
-	bne	$v0,$zero,$L37
+	bne	$v0,$zero,$L38
 	lw	$v1,36($fp)
 	lw	$v0,32($fp)
 	addu	$v0,$v1,$v0
 	lb	$v1,0($v0)
 	li	$v0,10			# 0xa
-	bne	$v1,$v0,$L36
-$L37:
+	bne	$v1,$v0,$L37
+$L38:
 	lw	$v0,36($fp)
 	sw	$v0,40($fp)
-$L35:
+$L36:
 	lw	$v0,40($fp)
 	move	$sp,$fp
 	lw	$ra,56($sp)
@@ -405,7 +431,7 @@ parse_cmdline:
 	li	$a2,48			# 0x30
 	la	$t9,memcpy
 	jal	$ra,$t9
-$L43:
+$L47:
 	addu	$v1,$fp,40
 	addu	$v0,$fp,36
 	sw	$v0,16($sp)
@@ -418,39 +444,39 @@ $L43:
 	sw	$v0,32($fp)
 	lw	$v1,32($fp)
 	li	$v0,-1			# 0xffffffffffffffff
-	bne	$v1,$v0,$L45
-	b	$L42
-$L45:
+	bne	$v1,$v0,$L49
+	b	$L46
+$L49:
 	lw	$v0,32($fp)
 	sw	$v0,88($fp)
 	li	$v0,86			# 0x56
 	lw	$v1,88($fp)
-	beq	$v1,$v0,$L48
+	beq	$v1,$v0,$L52
 	li	$v0,104			# 0x68
 	lw	$v1,88($fp)
-	beq	$v1,$v0,$L47
-	b	$L49
-$L47:
+	beq	$v1,$v0,$L51
+	b	$L53
+$L51:
 	lw	$v0,116($fp)
 	lw	$a0,0($v0)
 	move	$a1,$zero
 	la	$t9,do_usage
 	jal	$ra,$t9
-	b	$L43
-$L48:
+	b	$L47
+$L52:
 	lw	$v0,116($fp)
 	lw	$a0,0($v0)
 	la	$t9,do_version
 	jal	$ra,$t9
-	b	$L43
-$L49:
+	b	$L47
+$L53:
 	lw	$v0,116($fp)
 	lw	$a0,0($v0)
 	li	$a1,1			# 0x1
 	la	$t9,do_usage
 	jal	$ra,$t9
-	b	$L43
-$L42:
+	b	$L47
+$L46:
 	move	$sp,$fp
 	lw	$ra,104($sp)
 	lw	$fp,100($sp)
@@ -591,6 +617,11 @@ do_version:
 	jal	$ra,$t9
 	.end	do_version
 	.size	do_version, .-do_version
+	.rdata
+	.align	2
+$LC20:
+	.ascii	"Error: cannot allocate memory.\n\000"
+	.text
 	.align	2
 	.globl	create_matrix
 	.ent	create_matrix
@@ -614,6 +645,16 @@ create_matrix:
 	la	$t9,malloc
 	jal	$ra,$t9
 	sw	$v0,24($fp)
+	lw	$v0,24($fp)
+	bne	$v0,$zero,$L58
+	la	$a0,__sF+176
+	la	$a1,$LC20
+	la	$t9,fprintf
+	jal	$ra,$t9
+	li	$a0,1			# 0x1
+	la	$t9,exit
+	jal	$ra,$t9
+$L58:
 	lw	$v1,24($fp)
 	lw	$v0,48($fp)
 	sw	$v0,0($v1)
@@ -630,6 +671,17 @@ create_matrix:
 	la	$t9,malloc
 	jal	$ra,$t9
 	sw	$v0,8($s0)
+	lw	$v0,24($fp)
+	lw	$v0,8($v0)
+	bne	$v0,$zero,$L59
+	la	$a0,__sF+176
+	la	$a1,$LC20
+	la	$t9,fprintf
+	jal	$ra,$t9
+	li	$a0,1			# 0x1
+	la	$t9,exit
+	jal	$ra,$t9
+$L59:
 	lw	$v0,24($fp)
 	move	$sp,$fp
 	lw	$ra,44($sp)
@@ -657,7 +709,7 @@ destroy_matrix:
 	move	$fp,$sp
 	sw	$a0,40($fp)
 	lw	$v0,40($fp)
-	beq	$v0,$zero,$L54
+	beq	$v0,$zero,$L60
 	lw	$v0,40($fp)
 	lw	$a0,8($v0)
 	la	$t9,free
@@ -665,7 +717,7 @@ destroy_matrix:
 	lw	$a0,40($fp)
 	la	$t9,free
 	jal	$ra,$t9
-$L54:
+$L60:
 	move	$sp,$fp
 	lw	$ra,32($sp)
 	lw	$fp,28($sp)
@@ -675,13 +727,13 @@ $L54:
 	.size	destroy_matrix, .-destroy_matrix
 	.rdata
 	.align	2
-$LC20:
+$LC21:
 	.ascii	"%ld \000"
 	.align	2
-$LC21:
+$LC22:
 	.ascii	"%lg \000"
 	.align	2
-$LC22:
+$LC23:
 	.ascii	"\n\000"
 	.text
 	.align	2
@@ -704,7 +756,7 @@ print_matrix:
 	sw	$a1,52($fp)
 	lw	$v0,52($fp)
 	lw	$a0,48($fp)
-	la	$a1,$LC20
+	la	$a1,$LC21
 	lw	$a2,0($v0)
 	la	$t9,fprintf
 	jal	$ra,$t9
@@ -716,20 +768,20 @@ print_matrix:
 	mflo	$v0
 	sw	$v0,24($fp)
 	sw	$zero,28($fp)
-$L57:
+$L63:
 	lw	$v0,28($fp)
 	lw	$v1,24($fp)
 	slt	$v0,$v0,$v1
-	bne	$v0,$zero,$L60
-	b	$L58
-$L60:
+	bne	$v0,$zero,$L66
+	b	$L64
+$L66:
 	lw	$a0,52($fp)
 	lw	$v0,28($fp)
 	sll	$v1,$v0,3
 	lw	$v0,8($a0)
 	addu	$v0,$v1,$v0
 	lw	$a0,48($fp)
-	la	$a1,$LC21
+	la	$a1,$LC22
 	lw	$a2,0($v0)
 	lw	$a3,4($v0)
 	la	$t9,fprintf
@@ -737,10 +789,10 @@ $L60:
 	lw	$v0,28($fp)
 	addu	$v0,$v0,1
 	sw	$v0,28($fp)
-	b	$L57
-$L58:
+	b	$L63
+$L64:
 	lw	$a0,48($fp)
-	la	$a1,$LC22
+	la	$a1,$LC23
 	la	$t9,fprintf
 	jal	$ra,$t9
 	move	$sp,$fp
@@ -776,23 +828,23 @@ matrix_multiply:
 	jal	$ra,$t9
 	sw	$v0,24($fp)
 	sw	$zero,28($fp)
-$L62:
+$L68:
 	lw	$v0,24($fp)
 	lw	$v1,28($fp)
 	lw	$v0,0($v0)
 	sltu	$v0,$v1,$v0
-	bne	$v0,$zero,$L65
-	b	$L63
-$L65:
+	bne	$v0,$zero,$L71
+	b	$L69
+$L71:
 	sw	$zero,32($fp)
-$L66:
+$L72:
 	lw	$v0,24($fp)
 	lw	$v1,32($fp)
 	lw	$v0,4($v0)
 	sltu	$v0,$v1,$v0
-	bne	$v0,$zero,$L69
-	b	$L64
-$L69:
+	bne	$v0,$zero,$L75
+	b	$L70
+$L75:
 	lw	$a0,24($fp)
 	lw	$v0,24($fp)
 	lw	$v1,28($fp)
@@ -807,14 +859,14 @@ $L69:
 	sw	$zero,0($v0)
 	sw	$zero,4($v0)
 	sw	$zero,36($fp)
-$L70:
+$L76:
 	lw	$v0,56($fp)
 	lw	$v1,36($fp)
 	lw	$v0,4($v0)
 	sltu	$v0,$v1,$v0
-	bne	$v0,$zero,$L73
-	b	$L68
-$L73:
+	bne	$v0,$zero,$L79
+	b	$L74
+$L79:
 	lw	$a0,24($fp)
 	lw	$v0,24($fp)
 	lw	$v1,28($fp)
@@ -868,18 +920,18 @@ $L73:
 	lw	$v0,36($fp)
 	addu	$v0,$v0,1
 	sw	$v0,36($fp)
-	b	$L70
-$L68:
+	b	$L76
+$L74:
 	lw	$v0,32($fp)
 	addu	$v0,$v0,1
 	sw	$v0,32($fp)
-	b	$L66
-$L64:
+	b	$L72
+$L70:
 	lw	$v0,28($fp)
 	addu	$v0,$v0,1
 	sw	$v0,28($fp)
-	b	$L62
-$L63:
+	b	$L68
+$L69:
 	lw	$v0,24($fp)
 	move	$sp,$fp
 	lw	$ra,48($sp)
