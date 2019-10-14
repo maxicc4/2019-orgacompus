@@ -53,7 +53,6 @@ int main(int argc, char * const argv[])
 				fprintf(stderr, "Error: cannot parse line %ld.\n", num_line);
 				exit(1);
 			}
-
 			free(line);
 			
 			m_result = matrix_multiply(m1, m2);
@@ -93,7 +92,8 @@ int parse_line(char *line, matrix_t **m1, matrix_t **m2)
 		sscanf(token, "%lg", &value);
 		(*m1)->array[i] = value;
 		i++;
-		for (int x=0; x < 2; x++) {
+		int x;
+		for (x=0; x < 2; x++) {
 			matrix_t *m = matrices[x];
 			while ( (i < num_values) && (token=strtok(NULL, " ")) ) {
 				sscanf(token, "%lg", &value);

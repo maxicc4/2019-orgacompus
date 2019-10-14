@@ -3,7 +3,7 @@ BASEDIR=$(dirname "$0")
 
 prueba1()
 {
-	cat $BASEDIR/tests/input1.txt | ./tp0 > $BASEDIR/tests/temp.txt
+	cat $BASEDIR/tests/input1.txt | ./tp1 > $BASEDIR/tests/temp.txt
 
 	diff -q $BASEDIR/tests/temp.txt $BASEDIR/tests/output1.txt 1>/dev/null
 	if [ $? -eq 0 ]; then
@@ -16,7 +16,7 @@ prueba1()
 
 prueba2()
 {
-	cat $BASEDIR/tests/input2.txt | ./tp0 > $BASEDIR/tests/temp.txt
+	cat $BASEDIR/tests/input2.txt | ./tp1 > $BASEDIR/tests/temp.txt
 
 	diff -q $BASEDIR/tests/temp.txt $BASEDIR/tests/output2.txt 1>/dev/null
 	if [ $? -eq 0 ]; then
@@ -29,7 +29,7 @@ prueba2()
 
 prueba3()
 {
-	cat $BASEDIR/tests/input3.txt | ./tp0 > $BASEDIR/tests/temp.txt
+	cat $BASEDIR/tests/input3.txt | ./tp1 > $BASEDIR/tests/temp.txt
 
 	diff -q $BASEDIR/tests/temp.txt $BASEDIR/tests/output3.txt 1>/dev/null
 	if [ $? -eq 0 ]; then
@@ -42,7 +42,7 @@ prueba3()
 
 prueba4()
 {
-	cat $BASEDIR/tests/input4.txt | ./tp0 > $BASEDIR/tests/temp.txt
+	cat $BASEDIR/tests/input4.txt | ./tp1 > $BASEDIR/tests/temp.txt
 
 	diff -q $BASEDIR/tests/temp.txt $BASEDIR/tests/output4.txt 1>/dev/null
 	if [ $? -eq 0 ]; then
@@ -55,7 +55,7 @@ prueba4()
 
 prueba5()
 {
-	cat $BASEDIR/tests/input5.txt | ./tp0 > $BASEDIR/tests/temp.txt
+	cat $BASEDIR/tests/input5.txt | ./tp1 > $BASEDIR/tests/temp.txt
 
 	diff -q $BASEDIR/tests/temp.txt $BASEDIR/tests/output5.txt 1>/dev/null
 	if [ $? -eq 0 ]; then
@@ -68,7 +68,7 @@ prueba5()
 
 prueba6()
 {
-	cat $BASEDIR/tests/input6.txt | ./tp0 > $BASEDIR/tests/temp.txt
+	cat $BASEDIR/tests/input6.txt | ./tp1 > $BASEDIR/tests/temp.txt
 
 	diff -q $BASEDIR/tests/temp.txt $BASEDIR/tests/output6.txt 1>/dev/null
 	if [ $? -eq 0 ]; then

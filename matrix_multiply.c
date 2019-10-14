@@ -3,24 +3,6 @@
 #include "matrix.h"
 
 
-matrix_t* create_matrix(size_t rows, size_t cols)
-{
-	matrix_t *matrix = malloc(sizeof(matrix_t));
-	if (matrix == NULL) {
-		fprintf(stderr, "Error: cannot allocate memory.\n");
-		exit(1);
-	}
-	matrix->rows = rows;
-	matrix->cols = cols;
-	matrix->array = malloc(rows*cols*sizeof(double));
-	if (matrix->array == NULL) {
-		fprintf(stderr, "Error: cannot allocate memory.\n");
-		exit(1);
-	}
-
-	return matrix;
-}
-
 matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2)
 {
 	matrix_t *m_result = create_matrix(m1->rows, m2->cols);
