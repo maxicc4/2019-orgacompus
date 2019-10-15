@@ -89,14 +89,18 @@ int parse_line(char *line, matrix_t **m1, matrix_t **m2)
 		if (token == NULL) {
 			return 1;
 		}
-		sscanf(token, "%lg", &value);
+		if (sscanf(token, "%lg", &value) != 1) {
+			return 1;
+		}
 		(*m1)->array[i] = value;
 		i++;
 		int x;
 		for (x=0; x < 2; x++) {
 			matrix_t *m = matrices[x];
 			while ( (i < num_values) && (token=strtok(NULL, " ")) ) {
-				sscanf(token, "%lg", &value);
+				if (sscanf(token, "%lg", &value) != 1) {
+					return 1;
+				}
 				m->array[i] = value;
 				i++;
 			}
